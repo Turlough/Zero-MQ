@@ -15,7 +15,6 @@ public class ZmqSubsciber extends Thread {
 
     public static void main(String... args){
         ZmqSubsciber subsciber = new ZmqSubsciber(ZmqPublisher.ADDRESS);
-//        ZmqSubsciber subsciber = new ZmqSubsciber("tcp://test-v5.over-c.net:5571");
         subsciber.start();
     }
 
@@ -36,16 +35,17 @@ public class ZmqSubsciber extends Thread {
 
         socket.connect(address);
         socket.subscribe(new byte[]{});
-        sleep(100);
 
         //allow time for the connection to establish before listening
         sleep(100);
         System.out.println("Subscriber connected: "+ address);
 
         while (!isInterrupted()) {
-            String string = socket.recvStr(0).trim();
+            String msg = socket.recvStr(0).trim();
+            System.out.println("Subscriber received: " + msg);
 
-            System.out.println("Subscriber received: " + string);
+            if("Tock".equals(msg))
+                break;
         }
 
 
